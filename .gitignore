@@ -1,0 +1,13 @@
+# Secrets and environment variables
+.env
+**/.env
+
+# Build output and dependencies
+**/target/
+**/node_modules/
+**/.idea/
+*.log
+
+# Database backups and restore lists
+/Database/*.sql
+/Database/*.list

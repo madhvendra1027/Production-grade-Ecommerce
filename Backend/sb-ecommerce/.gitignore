@@ -1,0 +1,49 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Secrets ###
+# application.properties is no longer ignored: every credential in it has been
+# replaced by a ${ENV_VAR} placeholder, so the file is now safe - and necessary -
+# to commit. Previously it was excluded precisely because it held a database
+# password, a JWT signing secret and a block of AWS RDS credentials. If you
+# re-add a literal secret to it, this line needs to come back.
+#   src/main/resources/application.properties
+
+# Real values live here instead. Commit .env.example, never .env.
+.env
+.env.local
+.env.*.local
+
+# Uploaded product images are user data, not source. These were being committed.
+images/
