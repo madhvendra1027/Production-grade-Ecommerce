@@ -4,6 +4,7 @@ import { DialogBackdrop } from '@headlessui/react';
 import Status from './Status';
 import { MdDone, MdClose } from "react-icons/md";
 import Divider from "@mui/material/Divider";
+import { resolveImageUrl } from "../../utils/imageUrl";
 
 function ProductViewModal({open, setOpen, product, isAvailable}) {
   const {id, productName, image, description, quantity, price, discount, specialPrice} = product;
@@ -24,7 +25,7 @@ function ProductViewModal({open, setOpen, product, isAvailable}) {
                 {image && (
                   <div className='flex justify-center aspect=[3/2]'>
                     <img 
-                      src={image}
+                      src={resolveImageUrl(image)}
                       alt={productName}>
                     </img>
                   </div>

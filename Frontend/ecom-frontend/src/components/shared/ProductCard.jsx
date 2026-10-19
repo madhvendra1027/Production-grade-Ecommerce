@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaShoppingBag, FaShoppingCart } from "react-icons/fa";
 import ProductViewModal from "./ProductViewModal";
 import truncateText from "../../utils/truncateText";
+import { resolveImageUrl } from "../../utils/imageUrl";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../store/actions";
 import toast from "react-hot-toast";
@@ -49,7 +50,7 @@ const ProductCard = ({
             className="w-full overflow-hidden aspect-3/2">
                  <img 
                  className="w-full h-full cursor-pointer transition-transform duration-200 transform hover:scale-105"
-                 src={image}
+                 src={resolveImageUrl(image)}
                  alt={productName}>
                  </img>
             </div> 

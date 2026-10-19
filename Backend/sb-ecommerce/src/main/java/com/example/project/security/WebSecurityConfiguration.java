@@ -72,6 +72,7 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // --- genuinely public ---
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/", "/error").permitAll()
                         .requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
                         // signout stays open so an expired session can still clear its cookie
                         .requestMatchers("/api/auth/signout").permitAll()

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { removeFromCart } from "../../store/actions";
 import { formatPrice } from "../../utils/formatPrice";
 import truncateText from "../../utils/truncateText";
+import { resolveImageUrl } from "../../utils/imageUrl";
 const ItemContent = ({
     productId,
     productName,
@@ -56,7 +57,7 @@ const ItemContent = ({
 
                     <div className="md:w-36 sm:w-24 w-12">
                       <img 
-                        src={image}
+                        src={resolveImageUrl(image)}
                         alt={productName}
                         className="md:h-36 sm:h-24 h-12 w-full object-cover rounded-md"/>
 
