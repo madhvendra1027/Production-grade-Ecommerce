@@ -17,7 +17,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,11 +35,41 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class WebSecurityConfiguration {
 
+    @Value("${frontend.url:http://localhost:5173}")
+    private String frontEndUrl;
+
     @Autowired
     UserDetailsServiceImplementation userDetailsService;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        List<String> patterns = new ArrayList<>(List.of(
+                "https://*.vercel.app",
+                "https://*.onrender.com",
+                "http://localhost:[*]",
+                "http://127.0.0.1:[*]"
+        ));
+        if (frontEndUrl != null && !frontEndUrl.trim().isEmpty()) {
+            Arrays.stream(frontEndUrl.split(","))
+                    .map(String::trim)
+                    .map(url -> url.endsWith("/") ? url.substring(0, url.length() - 1) : url)
+                    .filter(url -> !url.isEmpty() && !patterns.contains(url))
+                    .forEach(patterns::add);
+        }
+        configuration.setAllowedOriginPatterns(patterns);
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("Set-Cookie", "Authorization"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -66,7 +104,7 @@ public class WebSecurityConfiguration {
         // registrable domains - you MUST re-enable CSRF tokens here, because SameSite
         // will no longer be doing that job.
         http.csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth

@@ -16,22 +16,26 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        List<String> origins = new ArrayList<>();
-        origins.add("http://localhost:5173");
-        origins.add("http://localhost:3000");
+        List<String> patterns = new ArrayList<>(List.of(
+                "https://*.vercel.app",
+                "https://*.onrender.com",
+                "http://localhost:[*]",
+                "http://127.0.0.1:[*]"
+        ));
 
         if (frontEndUrl != null && !frontEndUrl.trim().isEmpty()) {
             Arrays.stream(frontEndUrl.split(","))
                     .map(String::trim)
                     .map(url -> url.endsWith("/") ? url.substring(0, url.length() - 1) : url)
-                    .filter(url -> !url.isEmpty() && !origins.contains(url))
-                    .forEach(origins::add);
+                    .filter(url -> !url.isEmpty() && !patterns.contains(url))
+                    .forEach(patterns::add);
         }
 
         registry.addMapping("/**")
-                .allowedOrigins(origins.toArray(new String[0]))
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedOriginPatterns(patterns.toArray(new String[0]))
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
                 .allowedHeaders("*")
+                .exposedHeaders("Set-Cookie", "Authorization")
                 .allowCredentials(true);
     }
 }
