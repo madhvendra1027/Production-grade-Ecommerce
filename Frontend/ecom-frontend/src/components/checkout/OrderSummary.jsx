@@ -48,7 +48,11 @@ const OrderSummary = ({ totalPrice, cart, address, paymentMethod }) => {
                 {cart?.map((item) => (
                   <div key={item?.productId} className="flex items-center">
                     <img
-                      src={`${import.meta.env.VITE_BACK_END_URL}/images/${item?.image}`}
+                      src={
+                        item?.image?.startsWith("http")
+                          ? item.image
+                          : `${(import.meta.env.VITE_BACK_END_URL || "http://localhost:8080").replace(/\/$/, "")}/images/${item?.image}`
+                      }
                       alt="Product"
                       className="w-12 h-12 rounded"
                     />

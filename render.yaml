@@ -1,0 +1,58 @@
+services:
+  # ===========================================================================
+  # Backend Web Service (Spring Boot Docker)
+  # ===========================================================================
+  - type: web
+    name: sb-ecommerce-backend
+    runtime: docker
+    rootDir: Backend/sb-ecommerce
+    dockerfilePath: Dockerfile
+    plan: free
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: APP_JWT_COOKIE_SECURE
+        value: "true"
+      - key: APP_JWT_COOKIE_SAME_SITE
+        value: "None"
+      - key: DDL_AUTO
+        value: validate
+      - key: FLYWAY_ENABLED
+        value: "true"
+      - key: SWAGGER_ENABLED
+        value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+      - key: IMAGE_BASE_URL
+        sync: false
+
+  # ===========================================================================
+  # Frontend Static Site (React + Vite SPA)
+  # ===========================================================================
+  - type: static
+    name: sb-ecommerce-frontend
+    rootDir: Frontend/ecom-frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_BACK_END_URL
+        sync: false
+      - key: VITE_STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: VITE_FRONTEND_URL
+        sync: false

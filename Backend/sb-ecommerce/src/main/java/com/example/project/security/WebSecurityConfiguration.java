@@ -77,6 +77,7 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/api/auth/signout").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
                         // API docs. Disable in production via springdoc.api-docs.enabled=false
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 

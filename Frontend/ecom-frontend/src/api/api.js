@@ -1,9 +1,10 @@
-import axios from "axios"
+import axios from "axios";
 
-console.log(import.meta.env.VITE_BACK_END_URL);
+const rawBaseUrl = import.meta.env.VITE_BACK_END_URL || "http://localhost:8080";
+const cleanBaseUrl = rawBaseUrl.endsWith("/") ? rawBaseUrl.slice(0, -1) : rawBaseUrl;
 
 const api = axios.create({
-    baseURL: `${import.meta.env.VITE_BACK_END_URL}/api`,
+    baseURL: `${cleanBaseUrl}/api`,
     withCredentials: true,
 });
 

@@ -6,8 +6,12 @@
 **/target/
 **/node_modules/
 **/.idea/
+**/.vscode/
 *.log
 
 # Database backups and restore lists
 /Database/*.sql
 /Database/*.list
+
+# Graphify output
+graphify-out/

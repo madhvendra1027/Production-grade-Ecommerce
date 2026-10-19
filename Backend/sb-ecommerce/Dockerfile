@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy Maven configuration
 COPY pom.xml .
-RUN mvn -B dependency:go-offline
+RUN mvn -B dependency:go-offline || true
 
 # Copy application source code
 COPY src ./src
@@ -21,8 +21,9 @@ WORKDIR /app
 
 # Copy the packaged JAR from the build stage
 COPY --from=build /app/target/sb-ecommerce-0.0.1-SNAPSHOT.jar app.jar
-# Application port
-EXPOSE 8080
 
-# Launch the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Application port (Render default is 10000, Spring default is 8080)
+EXPOSE 8080 10000
+
+# Launch the application with Render PORT binding and low-memory JVM ergonomics for 512MB RAM free tier
+ENTRYPOINT ["sh", "-c", "java -XX:+UseSerialGC -Xss512k -XX:MaxRAMPercentage=70.0 -Dserver.port=${PORT:-8080} -jar app.jar"]
