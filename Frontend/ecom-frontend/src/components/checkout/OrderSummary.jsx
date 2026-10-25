@@ -56,8 +56,11 @@ const OrderSummary = ({ totalPrice, cart, address, paymentMethod }) => {
                     <div className="text-gray-500">
                       <p>{item?.productName}</p>
                       <p>
-                        {item?.quantity} X ${item?.specialPrice} = $
-                        formatPriceCalculation(item.quantity, item.specialPrice)
+                        {item?.quantity} X ${Number(item?.specialPrice).toFixed(2)} = $
+                        {formatPriceCalculation(
+                          item?.quantity,
+                          item?.specialPrice,
+                        )}
                       </p>
                     </div>
                   </div>
@@ -71,18 +74,18 @@ const OrderSummary = ({ totalPrice, cart, address, paymentMethod }) => {
             <h2 className="text-2xl font-semibold mb-2">Order Summary</h2>
 
             <div className="space-y-2">
-                <div className="flex justify-between">
-                    <span>Products</span>
-                    <span>${formatPriceCalculation(totalPrice, 1)}</span>
-                </div>
-                <div className="flex justify-between">
-                    <span>Tax (0%)</span>
-                    <span>$0.00</span>
-                </div>
-                <div className="flex justify-between font-semibold">
-                    <span>SubTotal</span>
-                    <span>${formatPriceCalculation(totalPrice, 1)}</span>
-                </div>
+              <div className="flex justify-between">
+                <span>Products</span>
+                <span>${formatPriceCalculation(totalPrice, 1)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Tax (0%)</span>
+                <span>$0.00</span>
+              </div>
+              <div className="flex justify-between font-semibold">
+                <span>SubTotal</span>
+                <span>${formatPriceCalculation(totalPrice, 1)}</span>
+              </div>
             </div>
           </div>
         </div>
