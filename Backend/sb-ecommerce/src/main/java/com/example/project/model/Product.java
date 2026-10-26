@@ -24,6 +24,10 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long productId;
 
+    // Stable external ID used only for idempotent DummyJSON imports. Null for normal products.
+    @Column(name = "dummyjson_id", unique = true)
+    private Long dummyJsonId;
+
     @NotBlank
     @Size(min = 3, message = "Product name should be least 3-characters long")
     private String productName;

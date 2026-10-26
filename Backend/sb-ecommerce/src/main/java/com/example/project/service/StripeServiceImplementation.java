@@ -22,17 +22,27 @@ public class StripeServiceImplementation implements StripeService {
     @Value("${stripe.secret.key}")
     private String stripeApiKey;
 
+
     @PostConstruct
-    public void init(){
-        // Fail at startup rather than at the first checkout attempt. Previously a
-        // missing STRIPE_SECRET_KEY just assigned null to Stripe.apiKey and the app
-        // booted happily.
-        if (!StringUtils.hasText(stripeApiKey)) {
+    public void init() {
+        String normalizedKey = stripeApiKey == null
+                ? null
+                : stripeApiKey.trim();
+
+        if (!StringUtils.hasText(normalizedKey)) {
             throw new IllegalStateException(
-                    "stripe.secret.key is not configured. Set the STRIPE_SECRET_KEY environment variable.");
+                    "Stripe API key is missing. Check STRIPE_SECRET_KEY in Render.");
         }
-        Stripe.apiKey = stripeApiKey;
+
+        if (normalizedKey.chars()
+                .anyMatch(c -> Character.isWhitespace(c))) {
+            throw new IllegalStateException(
+                    "Stripe API key contains whitespace. Check STRIPE_SECRET_KEY in Render.");
+        }
+
+        Stripe.apiKey = normalizedKey;
     }
+
 
     @Override
     public PaymentIntent createPaymentIntent(long amountInMinorUnits,

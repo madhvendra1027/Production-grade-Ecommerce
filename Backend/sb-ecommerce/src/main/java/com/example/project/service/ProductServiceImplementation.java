@@ -140,7 +140,18 @@ public class ProductServiceImplementation implements ProductService{
         return productResponse;
     }
 
-    private String constructImageUrl(String imageName){
+    private String constructImageUrl(String imageName) {
+        if (imageName == null || imageName.isBlank()) {
+            return imageName;
+        }
+
+        // Cloudinary images already have complete URLs.
+        if (imageName.startsWith("https://")
+                || imageName.startsWith("http://")) {
+            return imageName;
+        }
+
+        // Local images use the backend's image URL.
         return imageBaseUrl.endsWith("/")
                 ? imageBaseUrl + imageName
                 : imageBaseUrl + "/" + imageName;
